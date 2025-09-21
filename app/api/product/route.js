@@ -6,8 +6,16 @@ export async function GET() {
 
 export async function POST(request) {
   const body = await request.json();
-  console.log(body)
-  const product = new Product(body);
+
+  // ✅ map categoryId (from client) to category (schema)
+  const product = new Product({
+    code: body.code,
+    name: body.name,
+    description: body.description,
+    price: body.price,
+    category: body.categoryId || body.category   // handle either key
+  });
+
   await product.save();
   return Response.json(product);
 }
